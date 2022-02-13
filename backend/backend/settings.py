@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'questions',
     'projects',
     'users',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

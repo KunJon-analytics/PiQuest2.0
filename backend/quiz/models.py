@@ -6,7 +6,7 @@ from django.db import models
 from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django.core.validators import MaxValueValidator, MinValueValidator, validate_comma_separated_integer_list
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import now
 from django.utils.text import slugify
 from django.conf import settings
@@ -95,7 +95,7 @@ class Quiz(models.Model):
         Category, null=True, blank=True,
         verbose_name=_("Category"), on_delete=models.CASCADE)
 
-    tags = models.ManyToManyField(Category, blank=True, related_name='quizzes')
+    tags = models.ManyToManyField(SubCategory, blank=True, related_name='quizzes')
 
     projects = models.ManyToManyField(
         'projects.Project', blank=True, related_name='quizzes')
@@ -116,13 +116,6 @@ class Quiz(models.Model):
         help_text=_("Correct answer is NOT shown after question."
                     " Answers displayed at the end."),
         verbose_name=_("Answers at end"))
-
-    exam_paper = models.BooleanField(
-        blank=False, default=False,
-        help_text=_("If yes, the result of each"
-                    " attempt by a user will be"
-                    " stored. Necessary for marking."),
-        verbose_name=_("Exam Paper"))
 
     single_attempt = models.BooleanField(
         blank=False, default=False,
@@ -219,14 +212,10 @@ class Sitting(models.Model):
 
 
 class Winner(models.Model):
-    quiz = models.ForeignKey(Quiz, on_delete=models.SET_NULL, blank=True, null=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
+    sitting = models.OneToOneField(Sitting, on_delete=models.SET_NULL, blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     paid = models.BooleanField(default=False)
     claimed = models.BooleanField(default=False)
-    wallet_address = models.CharField(max_length=35, blank=True, null=True)
-    recipient = models.CharField(max_length=35, blank=True, null=True)
-    amount = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         return str(self.user)
