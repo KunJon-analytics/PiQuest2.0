@@ -9,12 +9,10 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now
 from django.utils.text import slugify
-from six import python_2_unicode_compatible
 from django.conf import settings
 
 
 
-@python_2_unicode_compatible
 class Category(models.Model):
 
     category = models.CharField(
@@ -43,7 +41,6 @@ class Category(models.Model):
 
 
 
-@python_2_unicode_compatible
 class SubCategory(models.Model):
 
     sub_category = models.CharField(
@@ -68,7 +65,6 @@ class SubCategory(models.Model):
         return self.sub_category.title() + " (" + self.category.category.title() + ")"
 
 
-@python_2_unicode_compatible
 class Quiz(models.Model):
 
     title = models.CharField(
